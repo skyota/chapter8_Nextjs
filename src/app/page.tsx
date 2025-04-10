@@ -1,15 +1,11 @@
 "use client"
 
-import useSWR from 'swr';
 import { Post } from './_types/Post';
-import fetcher from "./_utils/fetcher";
 import PostCard from "@/app/_components/PostCard";
+import useFetch from '@/app/_hooks/useFetch';
 
 export default function Home() {
-  const { data, error, isLoading } = useSWR<{ posts: Post[] }>(
-    "https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts",
-    fetcher
-  )
+  const { data, error, isLoading } = useFetch<{ posts: Post[] }>("https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts");
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>読み込みエラー</p>;

@@ -1,19 +1,17 @@
 "use client"
 
-import useSWR from "swr";
 import { useParams } from "next/navigation";
 
 import formatDate from "../../_utils/formatDate";
-import fetcher from "../../_utils/fetcher"
 import { Post } from "../../_types/Post";
+import useFetch from '@/app/_hooks/useFetch';
 
 const PostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, error, isLoading } = useSWR<{ post: Post }>(
-    id ? `https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}` : null,
-    fetcher
-    );
+  const { data, error, isLoading } = useFetch<{ post: Post }>(
+    id ? `https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}` : null
+  );
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました</p>;
