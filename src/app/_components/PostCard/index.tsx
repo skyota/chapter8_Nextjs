@@ -22,7 +22,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
             </div>
             <div className="flex space-x-2">
               {post.categories.map((category) => (
-                <p className="px-2 py-1 border border-blue-600 rounded text-xs text-blue-600">{category}</p>
+                <p className="px-2 py-1 border border-blue-600 rounded text-xs text-blue-600">{category.name}</p>
               ))}
             </div>
           </div>
