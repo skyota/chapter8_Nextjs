@@ -1,11 +1,11 @@
 "use client"
 
-import { Post } from './_types/Post';
+import { MicroCmsPost } from '@/app/_types/Post';
 import PostCard from "@/app/_components/PostCard";
 import useFetch from '@/app/_hooks/useFetch';
 
 export default function Home() {
-  const { data, error, isLoading } = useFetch<{ posts: Post[] }>("https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts");
+  const { data, error, isLoading } = useFetch<{ contents: MicroCmsPost[] }>("https://04ucsc8i6k.microcms.io/api/v1/posts");
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>読み込みエラー</p>;
@@ -15,9 +15,9 @@ export default function Home() {
     <div className="mt-12">
       <div className="mx-auto max-w-3xl px-6">
         <ul className="space-y-10">
-          {data.posts.map(post => (
-            <li>
-              <PostCard post={post} key={post.id} />
+          {data.contents.map(post => (
+            <li key={post.id}>
+              <PostCard post={post} />
             </li>
           ))}
         </ul>

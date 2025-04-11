@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import formatDate from "../../_utils/formatDate";
-import { Post } from "../../_types/Post";
+import { MicroCmsPost } from "@/app/_types/Post";
 
 
 type Props = {
-  post: Post; // post というキーに Post 型のデータが来ると宣言
+  post: MicroCmsPost;
 }
 
 const PostCard: React.FC<Props> = ({ post }) => {
@@ -22,7 +22,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
             </div>
             <div className="flex space-x-2">
               {post.categories.map((category) => (
-                <p className="px-2 py-1 border border-blue-600 rounded text-xs text-blue-600">{category}</p>
+                <p key={category.id} className="px-2 py-1 border border-blue-600 rounded text-xs text-blue-600">{category.name}</p>
               ))}
             </div>
           </div>
