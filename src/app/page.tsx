@@ -16,8 +16,8 @@ export default function Home() {
       <div className="mx-auto max-w-3xl px-6">
         <ul className="space-y-10">
           {data.contents.map(post => (
-            <li>
-              <PostCard post={post} key={post.id} />
+            <li key={post.id}>
+              <PostCard post={post} />
             </li>
           ))}
         </ul>
