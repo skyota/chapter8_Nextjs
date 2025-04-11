@@ -1,6 +1,7 @@
 "use client"
 
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 import formatDate from "../../_utils/formatDate";
 import { MicroCmsPost } from "@/app/_types/Post";
@@ -20,7 +21,7 @@ const PostDetail: React.FC = () => {
   return (
     <div className="mx-auto max-w-3xl px-6">
       <div className="mt-12">
-        <img src={data.thumbnail.url} alt={data.title} className="w-full" />
+        <Image height={500} width={500} src={data.thumbnail.url} alt={data.title} className="w-full" />
       </div>
       <div className="mt-4 px-4">
         <div className="flex items-center justify-between">
