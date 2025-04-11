@@ -5,7 +5,7 @@ import PostCard from "@/app/_components/PostCard";
 import useFetch from '@/app/_hooks/useFetch';
 
 export default function Home() {
-  const { data, error, isLoading } = useFetch<{ posts: MicroCmsPost[] }>("https://04ucsc8i6k.microcms.io/api/v1/posts");
+  const { data, error, isLoading } = useFetch<{ contents: MicroCmsPost[] }>("https://04ucsc8i6k.microcms.io/api/v1/posts");
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>読み込みエラー</p>;
