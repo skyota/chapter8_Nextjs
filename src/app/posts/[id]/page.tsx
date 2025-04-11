@@ -9,8 +9,8 @@ import useFetch from '@/app/_hooks/useFetch';
 const PostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, error, isLoading } = useFetch<{ post: MicroCmsPost }>(
-    id ? `https://04ucsc8i6k.microcms.io/api/v1/posts/${id}` : null
+  const { data, error, isLoading } = useFetch<MicroCmsPost>(
+    `https://04ucsc8i6k.microcms.io/api/v1/posts/${id}`
   );
 
   if (isLoading) return <p>読み込み中...</p>;
