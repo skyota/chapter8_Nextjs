@@ -1,17 +1,23 @@
-export type Post = {
+export interface Category {
   id: number;
-  title: string;
-  thumbnailUrl: string;
-  createdAt: string;
-  categories: string[];
-  content: string;
+  name: string;
 }
 
-export interface MicroCmsPost {
-  id: string
-  title: string
-  content: string
-  createdAt: string
-  categories: { id: string; name: string }[]
-  thumbnail: { url: string; height: number; width: number }
+export interface PostCategory {
+  id: number;
+  postId: number;
+  categoryId: number;
+  createdAt: string;
+  updateAt: string;
+  category: Category;
+}
+
+export interface Post {
+  id: number;
+  title: string;
+  content: string;
+  thumbnailUrl: string;
+  createdAt: string;
+  updateAt: string;
+  postCategories: PostCategory[];
 }
