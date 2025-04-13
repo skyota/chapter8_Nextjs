@@ -9,10 +9,6 @@ import { api } from "@/app/_utils/api";
 import CategoryForm from "../_components/CategoryForm";
 import { UpdateCategoryBody } from "../../../api/admin/categories/[id]/route";
 
-type UpdateForm = {
-  name: string;
-}
-
 const CategoryUpdate: React.FC = () => {
 
   const {id} = useParams<{id: string}>();
@@ -25,9 +21,9 @@ const CategoryUpdate: React.FC = () => {
 
   const category = data.category;
 
-  const onSubmit: SubmitHandler<UpdateForm> = async (formData: UpdateCategoryBody) => {
+  const onSubmit: SubmitHandler<UpdateCategoryBody> = async (formData) => {
     try {
-      const res = await api.put(`/api/admin/categories/${id}`,{
+      const res = await api.put<UpdateCategoryBody>(`/api/admin/categories/${id}`,{
         name: formData.name,
       });
       if (!res.ok) throw new Error("Network response was not ok");
@@ -50,7 +46,7 @@ const CategoryUpdate: React.FC = () => {
     }
   };
 
-  return <CategoryForm isEdit={true} defaultValue={category.name} onSubmit={onSubmit} handleDelete={handleDelete} />;
+  return <CategoryForm isEdit={true} defaultValue={category?.name} onSubmit={onSubmit} handleDelete={handleDelete} />;
 }
 
 export default CategoryUpdate;

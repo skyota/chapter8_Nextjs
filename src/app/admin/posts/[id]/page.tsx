@@ -9,13 +9,6 @@ import { api } from "@/app/_utils/api";
 import PostForm from "../_components/PostForm";
 import { UpdatePostRequestBody } from "../../../api/admin/posts/[id]/route";
 
-type UpdateForm = {
-  title: string;
-  content: string;
-  thumbnailUrl: string;
-  categoryIds: number[];
-}
-
 const PostUpdate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -31,9 +24,9 @@ const PostUpdate: React.FC = () => {
   const post = postData.post;
   const categories = categoryData.categories;
 
-  const onSubmit: SubmitHandler<UpdateForm> = async (formData: UpdatePostRequestBody) => {
+  const onSubmit: SubmitHandler<UpdatePostRequestBody> = async (formData) => {
     try {
-      const res = await api.put(`/api/admin/posts/${id}`, {
+      const res = await api.put<UpdatePostRequestBody>(`/api/admin/posts/${id}`, {
         title: formData.title,
         content: formData.content,
         thumbnailUrl: formData.thumbnailUrl,

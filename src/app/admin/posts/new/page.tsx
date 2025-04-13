@@ -8,13 +8,6 @@ import { Category } from "@/app/_types/Post";
 import PostForm from "../_components/PostForm/index";
 import { CreatePostRequestBody } from "../../../api/admin/posts/route";
 
-type CreateForm = {
-  title: string;
-  content: string;
-  thumbnailUrl: string;
-  categoryIds: number[];
-}
-
 const PostCreate: React.FC = () => {
   const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useFetch<{ categories: Category[] }>("/api/admin/categories");
   const router = useRouter();
@@ -25,7 +18,7 @@ const PostCreate: React.FC = () => {
 
   const categories = categoryData.categories;
 
-  const onSubmit: SubmitHandler<CreateForm> = async (data: CreatePostRequestBody) => {
+  const onSubmit: SubmitHandler<CreatePostRequestBody> = async (data) => {
     const payload = {
       title: data.title,
       content: data.content,
@@ -34,7 +27,7 @@ const PostCreate: React.FC = () => {
     };
 
     try {
-      const res = await api.post("/api/admin/posts", payload);
+      const res = await api.post<CreatePostRequestBody>("/api/admin/posts", payload);
       if (!res.ok) throw new Error("Network response was not ok");
       alert("記事を作成しました");
       router.push("/admin/posts");

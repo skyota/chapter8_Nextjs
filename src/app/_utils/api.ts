@@ -1,5 +1,11 @@
 export const api ={
-  post: async (url: string, body: unknown) => {
+  get: async (url: string) => {
+    const res = await fetch(url, {
+      method: "GET",
+    });
+  },
+
+  post: async <T>(url: string, body: T) => {
     return await fetch(url, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -7,7 +13,7 @@ export const api ={
     });
   },
   
-  put: async (url: string, body: unknown) => {
+  put: async <T>(url: string, body: T) => {
     return await fetch(url, {
       method: "PUT",
       headers: {"Content-Type": "application/json"},
