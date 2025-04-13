@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from '@prisma/client'
+import { supabase } from "@/app/_utils/supabase";
 
 const prisma = new PrismaClient()
 
@@ -12,6 +13,13 @@ export const GET = async (
   { params }: { params: { id: string } },
 ) => {
   const { id } = params
+
+  const token = request.headers.get('Authorization') ?? ''
+
+  const { error } = await supabase.auth.getUser(token)
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
 
   try {
     const category = await prisma.category.findUnique({
@@ -33,6 +41,13 @@ export const PUT = async (
   const body = await request.json()
   const { name }: UpdateCategoryBody = body
 
+  const token = request.headers.get('Authorization') ?? ''
+
+  const { error } = await supabase.auth.getUser(token)
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
+
   try {
     const category = await prisma.category.update({
       where: {
@@ -53,6 +68,13 @@ export const DELETE = async (
   {params} : {params: {id: string}},
 ) => {
   const {id} = params
+
+  const token = request.headers.get('Authorization') ?? ''
+
+  const { error } = await supabase.auth.getUser(token)
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
 
   try {
     await prisma.category.delete({

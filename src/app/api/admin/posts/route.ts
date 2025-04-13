@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { supabase } from "@/app/_utils/supabase";
 
 const prisma = new PrismaClient()
 
@@ -12,6 +13,13 @@ export interface CreatePostRequestBody {
 }
 
 export const GET = async (request: NextRequest) => {
+  const token = request.headers.get('Authorization') ?? ''
+
+  const { error } = await supabase.auth.getUser(token)
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
+  
   try {
     const posts = await prisma.post.findMany({
       include: {
@@ -37,6 +45,13 @@ export const GET = async (request: NextRequest) => {
 }
 
 export const POST = async (request: NextRequest, context: any) => {
+  const token = request.headers.get('Authorization') ?? ''
+
+  const { error } = await supabase.auth.getUser(token)
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
+
   try {
     // リクエストの中のbodyを取得
     const body = await request.json()

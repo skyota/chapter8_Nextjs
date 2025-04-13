@@ -1,6 +1,6 @@
-import useFetch from "@/app/_hooks/useFetch";
+import useFetchWithAuth from "./useFetchWithAuth";
 import { Post } from '@/app/_types/Post';
 
-const usePost = (id: string) => useFetch<Post>(`/api/admin/posts/${id}`);
+const usePost = (id: string) => useFetchWithAuth<Post>(`/api/admin/posts/${id}`);
 
 export default usePost;

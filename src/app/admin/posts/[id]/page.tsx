@@ -8,10 +8,12 @@ import { useRouter } from "next/navigation";
 import { api } from "@/app/_utils/api";
 import PostForm from "../_components/PostForm";
 import { UpdatePostRequestBody } from "../../../api/admin/posts/[id]/route";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 const PostUpdate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const { token } = useSupabaseSession();
 
   const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useCategories();
   const { data: postData, error: postError, isLoading: postLoading } = usePost(id);
@@ -31,7 +33,7 @@ const PostUpdate: React.FC = () => {
         content: formData.content,
         thumbnailUrl: formData.thumbnailUrl,
         categories: formData.categoryIds.map((id) => ({id: Number(id)}))
-      })
+      }, token)
       if (!res.ok) throw new Error("Network response was not ok");
       alert("更新しました")
     } catch (error) {
@@ -41,7 +43,7 @@ const PostUpdate: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await api.delete(`/api/admin/posts/${id}`);
+      const res = await api.delete(`/api/admin/posts/${id}`, token);
       if (!res.ok) throw new Error("削除に失敗しました");
       alert("記事を削除しました");
       // 削除後は一覧ページに遷移

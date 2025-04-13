@@ -7,12 +7,14 @@ import { useRouter } from "next/navigation";
 import { api } from "@/app/_utils/api";
 import CategoryForm from "../_components/CategoryForm";
 import { UpdateCategoryBody } from "../../../api/admin/categories/[id]/route";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 const CategoryUpdate: React.FC = () => {
 
   const {id} = useParams<{id: string}>();
   const router = useRouter();
   const {data, error, isLoading} = useCategory(id);
+  const { token } = useSupabaseSession();
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました</p>;
@@ -24,7 +26,7 @@ const CategoryUpdate: React.FC = () => {
     try {
       const res = await api.put<UpdateCategoryBody>(`/api/admin/categories/${id}`,{
         name: formData.name,
-      });
+      }, token);
       if (!res.ok) throw new Error("Network response was not ok");
       alert("更新しました");
     } catch (error) {
@@ -34,7 +36,7 @@ const CategoryUpdate: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await api.delete(`/api/admin/categories/${id}`);
+      const res = await api.delete(`/api/admin/categories/${id}`, token);
       if (!res.ok) throw new Error("削除に失敗しました");
       alert("カテゴリーを削除しました");
       // 削除後は一覧ページに遷移
