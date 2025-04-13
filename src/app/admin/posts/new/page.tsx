@@ -6,7 +6,7 @@ import useFetch from '@/app/_hooks/useFetch';
 import { api } from "@/app/_utils/api";
 import { Category } from "@/app/_types/Post";
 import PostForm from "../_components/PostForm/index";
-import { PostRequestBody } from "@/types/requestBody";
+import { CreatePostRequestBody } from "../../../api/admin/posts/route";
 
 type CreateForm = {
   title: string;
@@ -25,7 +25,7 @@ const PostCreate: React.FC = () => {
 
   const categories = categoryData.categories;
 
-  const onSubmit: SubmitHandler<CreateForm> = async (data: PostRequestBody) => {
+  const onSubmit: SubmitHandler<CreateForm> = async (data: CreatePostRequestBody) => {
     const payload = {
       title: data.title,
       content: data.content,

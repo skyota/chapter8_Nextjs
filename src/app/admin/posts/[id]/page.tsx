@@ -7,7 +7,7 @@ import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { api } from "@/app/_utils/api";
 import PostForm from "../_components/PostForm";
-import { PostRequestBody } from "@/types/requestBody";
+import { UpdatePostRequestBody } from "../../../api/admin/posts/[id]/route";
 
 type UpdateForm = {
   title: string;
@@ -31,7 +31,7 @@ const PostUpdate: React.FC = () => {
   const post = postData.post;
   const categories = categoryData.categories;
 
-  const onSubmit: SubmitHandler<UpdateForm> = async (formData: PostRequestBody) => {
+  const onSubmit: SubmitHandler<UpdateForm> = async (formData: UpdatePostRequestBody) => {
     try {
       const res = await api.put(`/api/admin/posts/${id}`, {
         title: formData.title,

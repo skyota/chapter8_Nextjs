@@ -4,7 +4,7 @@ import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { api } from "@/app/_utils/api";
 import CategoryForm from "../_components/CategoryForm/index";
-import { CategoryRequestBody } from "@/types/requestBody";
+import { CreateCategoryRequestBody } from "../../../api/admin/categories/route";
 
 type CreateForm = {
   name: string;
@@ -13,7 +13,7 @@ type CreateForm = {
 const CategoryCreate: React.FC = () => {
   const router = useRouter();
   
-  const onSubmit: SubmitHandler<CreateForm> = async (data: CategoryRequestBody) => {
+  const onSubmit: SubmitHandler<CreateForm> = async (data: CreateCategoryRequestBody) => {
     try {
       const res = await api.post("/api/admin/categories", data);
       if (!res.ok) throw new Error("Network response was not ok");
