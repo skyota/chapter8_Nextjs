@@ -4,13 +4,12 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 
 import formatDate from "../../_utils/formatDate";
-import { Post } from "@/app/_types/Post";
-import useFetch from '@/app/_hooks/useFetch';
+import usePost from '@/app/_hooks/usePost';
 
 const PostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, error, isLoading } = useFetch<Post>(`/api/posts/${id}`);
+  const { data, error, isLoading } = usePost(id);
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました</p>;

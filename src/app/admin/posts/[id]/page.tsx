@@ -1,7 +1,7 @@
 "use client"
 
-import { Category, Post } from "@/app/_types/Post";
-import useFetch from '@/app/_hooks/useFetch';
+import useCategories from '@/app/_hooks/useCategories';
+import useAdminPost from '@/app/_hooks/useAdminPost';
 import { useParams } from "next/navigation";
 import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -13,8 +13,8 @@ const PostUpdate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
-  const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useFetch<{ categories: Category[] }>("/api/admin/categories");
-  const { data: postData, error: postError, isLoading: postLoading } = useFetch<Post>(`/api/admin/posts/${id}`);
+  const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useCategories();
+  const { data: postData, error: postError, isLoading: postLoading } = useAdminPost(id);
 
   if (categoryLoading || postLoading) return <p>読み込み中...</p>;
   if (categoryError || postError) return <p>読み込みエラー</p>;

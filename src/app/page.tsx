@@ -1,11 +1,10 @@
 "use client"
 
-import { Post } from '@/app/_types/Post';
 import PostCard from "@/app/_components/PostCard";
-import useFetch from '@/app/_hooks/useFetch';
+import usePosts from '@/app/_hooks/usePosts';
 
 export default function Home() {
-  const { data, error, isLoading } = useFetch<{ posts: Post[] }>("/api/posts");
+  const { data, error, isLoading } = usePosts();
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>読み込みエラー</p>;

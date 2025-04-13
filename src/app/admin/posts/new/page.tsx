@@ -2,14 +2,13 @@
 
 import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import useFetch from '@/app/_hooks/useFetch';
+import useCategories from '@/app/_hooks/useCategories';
 import { api } from "@/app/_utils/api";
-import { Category } from "@/app/_types/Post";
 import PostForm from "../_components/PostForm/index";
 import { CreatePostRequestBody } from "../../../api/admin/posts/route";
 
 const PostCreate: React.FC = () => {
-  const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useFetch<{ categories: Category[] }>("/api/admin/categories");
+  const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useCategories();
   const router = useRouter();
 
   if (categoryLoading) return <p>読み込み中...</p>;

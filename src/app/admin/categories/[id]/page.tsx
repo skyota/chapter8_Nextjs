@@ -2,8 +2,7 @@
 
 import { SubmitHandler } from "react-hook-form"
 import { useParams } from "next/navigation";
-import useFetch from "@/app/_hooks/useFetch";
-import { Category } from "@/app/_types/Post";
+import useCategory from "@/app/_hooks/useCategory";
 import { useRouter } from "next/navigation";
 import { api } from "@/app/_utils/api";
 import CategoryForm from "../_components/CategoryForm";
@@ -13,7 +12,7 @@ const CategoryUpdate: React.FC = () => {
 
   const {id} = useParams<{id: string}>();
   const router = useRouter();
-  const {data, error, isLoading} = useFetch<{category: Category}>(`/api/admin/categories/${id}`);
+  const {data, error, isLoading} = useCategory(id);
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました</p>;
@@ -46,7 +45,7 @@ const CategoryUpdate: React.FC = () => {
     }
   };
 
-  return <CategoryForm isEdit={true} defaultValue={category?.name} onSubmit={onSubmit} handleDelete={handleDelete} />;
+  return <CategoryForm isEdit={true} defaultValue={category.name} onSubmit={onSubmit} handleDelete={handleDelete} />;
 }
 
 export default CategoryUpdate;

@@ -1,11 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import {Category} from "@/app/_type/Post"
-import useFetch from "@/app/_hooks/useFetch";
+import useCategories from "@/app/_hooks/useCategories";
 
 const Categories: React.FC = () => {
-  const {data, error, isLoading} = useFetch<{categories: Category[]}>("/api/admin/categories");
+  const {data, error, isLoading} = useCategories();
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>読み込みエラー</p>;
   if (!data) return <p>カテゴリーが存在しません。</p>;

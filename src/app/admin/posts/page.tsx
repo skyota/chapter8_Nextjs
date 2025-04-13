@@ -1,12 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { Post } from '@/app/_types/Post';
-import useFetch from '@/app/_hooks/useFetch';
+import useAdminPosts from '@/app/_hooks/useAdminPosts';
 import PostItem from "./_components/PostItem";
 
 const Posts: React.FC = () => {
-  const { data, error, isLoading } = useFetch<{ posts: Post[] }>("/api/admin/posts");
+  const { data, error, isLoading } = useAdminPosts();
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>読み込みエラー</p>;
