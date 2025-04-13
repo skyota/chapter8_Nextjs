@@ -1,7 +1,7 @@
 "use client"
 
-import useCategories from '@/app/_hooks/useCategories';
-import useAdminPost from '@/app/_hooks/useAdminPost';
+import useCategories from '../../_hooks/useCategories';
+import usePost from '../../_hooks/usePost';
 import { useParams } from "next/navigation";
 import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ const PostUpdate: React.FC = () => {
   const router = useRouter();
 
   const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useCategories();
-  const { data: postData, error: postError, isLoading: postLoading } = useAdminPost(id);
+  const { data: postData, error: postError, isLoading: postLoading } = usePost(id);
 
   if (categoryLoading || postLoading) return <p>読み込み中...</p>;
   if (categoryError || postError) return <p>読み込みエラー</p>;

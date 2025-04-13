@@ -1,11 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import useAdminPosts from '@/app/_hooks/useAdminPosts';
+import usePosts from '../_hooks/usePosts';
 import PostItem from "./_components/PostItem";
 
 const Posts: React.FC = () => {
-  const { data, error, isLoading } = useAdminPosts();
+  const { data, error, isLoading } = usePosts();
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p>読み込みエラー</p>;

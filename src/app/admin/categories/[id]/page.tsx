@@ -2,7 +2,7 @@
 
 import { SubmitHandler } from "react-hook-form"
 import { useParams } from "next/navigation";
-import useCategory from "@/app/_hooks/useCategory";
+import useCategory from "../../_hooks/useCategory";
 import { useRouter } from "next/navigation";
 import { api } from "@/app/_utils/api";
 import CategoryForm from "../_components/CategoryForm";

@@ -2,7 +2,7 @@
 
 import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import useCategories from '@/app/_hooks/useCategories';
+import useCategories from '../../_hooks/useCategories';
 import { api } from "@/app/_utils/api";
 import PostForm from "../_components/PostForm/index";
 import { CreatePostRequestBody } from "../../../api/admin/posts/route";

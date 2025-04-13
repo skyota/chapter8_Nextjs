@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import useCategories from "@/app/_hooks/useCategories";
+import useCategories from "../_hooks/useCategories";
 
 const Categories: React.FC = () => {
   const {data, error, isLoading} = useCategories();
