@@ -7,6 +7,7 @@ import { Category } from "@/app/_types/Post";
 import { useRouter } from "next/navigation";
 import { api } from "@/app/_utils/api";
 import CategoryForm from "../_components/CategoryForm";
+import { CategoryRequestBody } from "@/types/requestBody";
 
 type UpdateForm = {
   name: string;
@@ -24,7 +25,7 @@ const CategoryUpdate: React.FC = () => {
 
   const category = data.category;
 
-  const onSubmit: SubmitHandler<UpdateForm> = async (formData) => {
+  const onSubmit: SubmitHandler<UpdateForm> = async (formData: CategoryRequestBody) => {
     try {
       const res = await api.put(`/api/admin/categories/${id}`,{
         name: formData.name,

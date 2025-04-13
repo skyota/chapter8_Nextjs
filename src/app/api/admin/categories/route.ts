@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from '@prisma/client'
+import { CategoryRequestBody } from "@/types/requestBody";
 
 const prisma = new PrismaClient()
-
-interface CreateCategoryRequestBody {
-  name: string
-}
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -23,7 +20,7 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest, context: any) => {
   try {
     const body = await request.json()
-    const { name }: CreateCategoryRequestBody = body
+    const { name }: CategoryRequestBody = body
     const data = await prisma.category.create({
       data: {
         name,

@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { PostRequestBody } from "@/types/requestBody";
 
 const prisma = new PrismaClient()
-
-interface UpdatePostRequestBody {
-  title: string
-  content: string
-  categories: { id: number }[]
-  thumbnailUrl: string
-}
 
 export const GET = async (
   request: NextRequest,
@@ -46,7 +40,7 @@ export const PUT = async (
 ) => {
   const { id } = params
   const body = await request.json()
-  const { title, content, categories, thumbnailUrl }: UpdatePostRequestBody = body
+  const { title, content, categories, thumbnailUrl }: PostRequestBody = body
 
   try {
     const post = await prisma.post.update({
