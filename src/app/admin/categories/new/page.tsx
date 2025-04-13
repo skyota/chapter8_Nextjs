@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Label from "../../_components/Label";
 import TextInput from "../../_components/TextInput"
 import { useRouter } from "next/navigation";
+import { api } from "@/app/_utils/api";
 
 type CreateForm = {
   name: string;
@@ -15,11 +16,7 @@ const CategoryCreate: React.FC = () => {
   
   const onSubmit: SubmitHandler<CreateForm> = async (data) => {
     try {
-      const res = await fetch("/api/admin/categories", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-      });
+      const res = await api.post("/api/admin/categories", data);
       if (!res.ok) throw new Error("Network response was not ok");
       alert("カテゴリーを作成しました");
       reset();

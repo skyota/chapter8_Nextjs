@@ -7,6 +7,7 @@ import { Category } from "@/app/_types/Post";
 import Label from "../../_components/Label";
 import TextInput from "../../_components/TextInput"
 import { useRouter } from "next/navigation";
+import { api } from "@/app/_utils/api";
 
 type UpdateForm = {
   name: string;
@@ -27,12 +28,8 @@ const CategoryUpdate: React.FC = () => {
 
   const onSubmit: SubmitHandler<UpdateForm> = async (formData) => {
     try {
-      const res = await fetch(`/api/admin/categories/${id}`, {
-        method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          name: formData.name
-        })
+      const res = await api.put(`/api/admin/categories/${id}`,{
+        name: formData.name,
       });
       if (!res.ok) throw new Error("Network response was not ok");
       alert("更新しました");
@@ -43,9 +40,7 @@ const CategoryUpdate: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`/api/admin/categories/${id}`, {
-        method: "DELETE"
-      });
+      const res = await api.delete(`/api/admin/categories/${id}`);
       if (!res.ok) throw new Error("削除に失敗しました");
       alert("カテゴリーを削除しました");
       // 削除後は一覧ページに遷移

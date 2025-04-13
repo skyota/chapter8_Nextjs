@@ -9,6 +9,7 @@ import Textarea from "../../_components/Textarea";
 import Checkbox from "../../_components/Checkbox";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { api } from "@/app/_utils/api";
 
 type UpdateForm = {
   title: string;
@@ -35,16 +36,12 @@ const PostUpdate: React.FC = () => {
 
   const onSubmit: SubmitHandler<UpdateForm> = async (formData) => {
     try {
-      const res = await fetch(`/api/admin/posts/${id}`, {
-        method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          title: formData.title,
-          content: formData.content,
-          thumbnailUrl: formData.thumbnailUrl,
-          categories: formData.categoryIds.map((id) => ({id: Number(id)}))
-        })
-      });
+      const res = await api.put(`/api/admin/posts/${id}`, {
+        title: formData.title,
+        content: formData.content,
+        thumbnailUrl: formData.thumbnailUrl,
+        categories: formData.categoryIds.map((id) => ({id: Number(id)}))
+      })
       if (!res.ok) throw new Error("Network response was not ok");
       alert("更新しました")
     } catch (error) {
@@ -54,9 +51,7 @@ const PostUpdate: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`/api/admin/posts/${id}`, {
-        method: "DELETE"
-      });
+      const res = await api.delete(`/api/admin/posts/${id}`);
       if (!res.ok) throw new Error("削除に失敗しました");
       alert("記事を削除しました");
       // 削除後は一覧ページに遷移

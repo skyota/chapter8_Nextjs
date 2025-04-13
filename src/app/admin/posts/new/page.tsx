@@ -7,6 +7,7 @@ import TextInput from "../../_components/TextInput"
 import Textarea from "../../_components/Textarea";
 import Checkbox from "../../_components/Checkbox";
 import useFetch from '@/app/_hooks/useFetch';
+import { api } from "@/app/_utils/api";
 
 type CreateForm = {
   title: string;
@@ -34,14 +35,8 @@ const PostCreate: React.FC = () => {
       categories: (data.categoryIds || []).map((id) => ({ id: Number(id) }))
     };
 
-    console.log("送信データ:", payload); 
-
     try {
-      const res = await fetch("/api/admin/posts", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload)
-      });
+      const res = await api.post("/api/admin/posts", payload);
       if (!res.ok) throw new Error("Network response was not ok");
       alert("記事を作成しました");
       reset();
