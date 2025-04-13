@@ -1,0 +1,82 @@
+"use client"
+
+import { useForm, SubmitHandler } from "react-hook-form";
+import Label from "../../../_components/Label";
+import TextInput from "../../../_components/TextInput"
+import Textarea from "../../../_components/Textarea";
+import Checkbox from "../../../_components/Checkbox";
+import { Post, Category } from "@/app/_types/Post";
+
+type PostFormValues = {
+  title: string;
+  content: string;
+  thumbnailUrl: string;
+  categoryIds: number[];
+}
+
+type Props = {
+  isEdit?: boolean;
+  categories: Category[];
+  post?: Post;
+  onSubmit: SubmitHandler<PostFormValues>;
+  handleDelete?: () => void;
+}
+
+const PostForm: React.FC<Props> = ({isEdit, categories, post, onSubmit, handleDelete}) => {
+  const {register, handleSubmit, formState: {errors}} = useForm<PostFormValues>();
+  
+  const titleLabel = isEdit ? "編集" : "作成"
+
+  return (
+    <div className="px-5 pt-10">
+      <h2 className="text-2xl font-bold">記事{titleLabel}</h2>
+      <form className="mt-20 space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <Label name="title" label="タイトル" />
+          <TextInput
+            type="text"
+            error={errors.title?.message}
+            defaultValue={post?.title}
+            {...register("title", {required: "タイトルは必須です"})}
+          />
+        </div>
+        <div>
+          <Label name="content" label="内容" />
+          <Textarea
+            error={errors.content?.message}
+            defaultValue={post?.content}
+            {...register("content", {required: "本文は必須です"})}
+          />
+        </div>
+        <div>
+          <Label name="thumbnailUrl" label="サムネイルURL" />
+          <TextInput
+            type="text"
+            error={errors.thumbnailUrl?.message}
+            defaultValue={post?.thumbnailUrl}
+            {...register("thumbnailUrl", {required: "サムネイルURLは必須です"})}
+          />
+        </div>
+        <div>
+          <Label name="categories" label="カテゴリー" />
+          {categories.map((category) => (
+            <Checkbox
+              key={category.id}
+              category={category}
+              defaultChecked={post?.postCategories.some((pc) => pc.category.id === category.id)}
+              {...register("categoryIds")}
+            />
+          ))}
+        </div>
+        <div className="mt-4">
+          <input type='submit' value={titleLabel} className="bg-blue-700 text-white border font-bold px-4 py-2 rounded-lg cursor-pointer" />
+            {isEdit && (
+              <input type='button' value='削除' onClick={handleDelete} className="bg-red-700 text-white border font-bold px-4 py-2 rounded-lg cursor-pointer" />
+            )}
+        </div>
+      </form>
+    </div>
+  )
+}
+
+export default PostForm;

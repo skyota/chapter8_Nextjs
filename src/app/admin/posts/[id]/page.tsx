@@ -3,13 +3,10 @@
 import { Category, Post } from "@/app/_types/Post";
 import useFetch from '@/app/_hooks/useFetch';
 import { useParams } from "next/navigation";
-import Label from "../../_components/Label";
-import TextInput from "../../_components/TextInput";
-import Textarea from "../../_components/Textarea";
-import Checkbox from "../../_components/Checkbox";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { api } from "@/app/_utils/api";
+import PostForm from "../_components/PostForm";
 
 type UpdateForm = {
   title: string;
@@ -19,12 +16,11 @@ type UpdateForm = {
 }
 
 const PostUpdate: React.FC = () => {
-  const {register, handleSubmit, formState: {errors}} = useForm<UpdateForm>();
-  const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useFetch<{ categories: Category[] }>("/api/admin/categories");
-
   const { id } = useParams<{ id: string }>();
-  const { data: postData, error: postError, isLoading: postLoading } = useFetch<Post>(`/api/admin/posts/${id}`);
   const router = useRouter();
+
+  const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useFetch<{ categories: Category[] }>("/api/admin/categories");
+  const { data: postData, error: postError, isLoading: postLoading } = useFetch<Post>(`/api/admin/posts/${id}`);
 
   if (categoryLoading || postLoading) return <p>読み込み中...</p>;
   if (categoryError || postError) return <p>読み込みエラー</p>;
@@ -62,63 +58,7 @@ const PostUpdate: React.FC = () => {
     }
   };
 
-  return (
-    <div className="px-5 pt-10">
-      <h2 className="text-2xl font-bold">記事編集</h2>
-      <form className="mt-20 space-y-5" onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <Label name="title" label="タイトル" />
-          <TextInput
-            type="text"
-            error={errors.title?.message}
-            defaultValue={post.title}
-            {...register("title", {required: "タイトルは必須です"})}
-          />
-        </div>
-        <div>
-          <Label name="content" label="内容" />
-          <Textarea
-            error={errors.content?.message}
-            defaultValue={post.content}
-            {...register("content", {required: "本文は必須です"})}
-          />
-        </div>
-        <div>
-          <Label name="thumbnailUrl" label="サムネイルURL" />
-          <TextInput
-            type="text"
-            error={errors.thumbnailUrl?.message}
-            defaultValue={post.thumbnailUrl}
-            {...register("thumbnailUrl", {required: "サムネイルURLは必須です"})}
-          />
-        </div>
-        <div>
-          <Label name="categories" label="カテゴリー" />
-          {categories.map((category) => (
-            <Checkbox
-              key={category.id}
-              category={category}
-              defaultChecked={post.postCategories.some((pc) => pc.category.id === category.id)}
-              {...register("categoryIds")}
-            />
-          ))}
-        </div>
-        <div className="mt-8 flex space-x-3">
-          <input
-            type="submit"
-            value="更新"
-            className="bg-blue-700 text-white border font-bold px-4 py-2 rounded-lg cursor-pointer"
-          />
-          <input
-            type="button"
-            value="削除"
-            onClick={handleDelete}
-            className="bg-red-600 text-white border font-bold px-4 py-2 rounded-lg cursor-pointer"
-          />
-        </div>
-      </form>
-    </div>
-  )
+  return <PostForm isEdit={true} categories={categories} post={post} onSubmit={onSubmit} handleDelete={handleDelete} />;
 }
 
 export default PostUpdate;
