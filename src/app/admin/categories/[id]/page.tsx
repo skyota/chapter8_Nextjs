@@ -1,20 +1,18 @@
 "use client"
 
-import { useForm, SubmitHandler } from "react-hook-form"
+import { SubmitHandler } from "react-hook-form"
 import { useParams } from "next/navigation";
 import useFetch from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/Post";
-import Label from "../../_components/Label";
-import TextInput from "../../_components/TextInput"
 import { useRouter } from "next/navigation";
 import { api } from "@/app/_utils/api";
+import CategoryForm from "../_components/CategoryForm";
 
 type UpdateForm = {
   name: string;
 }
 
 const CategoryUpdate: React.FC = () => {
-  const {register, handleSubmit, formState: {errors}} = useForm<UpdateForm>();
 
   const {id} = useParams<{id: string}>();
   const router = useRouter();
@@ -51,26 +49,7 @@ const CategoryUpdate: React.FC = () => {
     }
   };
 
-  return (
-    <div className="px-5 pt-10">
-      <h2 className="text-2xl font-bold">カテゴリー編集</h2>
-      <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <Label name="name" label="カテゴリー名" />
-          <TextInput
-            type="text"
-            error={errors.name?.message}
-            defaultValue={category.name}
-            {...register("name", {required: "カテゴリー名は必須です"})}
-          />
-        </div>
-        <div className="mt-4 flex space-x-2">
-          <input type='submit' value='更新' className="bg-blue-700 text-white border font-bold px-4 py-2 rounded-lg cursor-pointer" />
-          <input type='button' value='削除' onClick={handleDelete} className="bg-red-700 text-white border font-bold px-4 py-2 rounded-lg cursor-pointer" />
-        </div>
-      </form>
-    </div>
-  )
+  return <CategoryForm isEdit={true} defaultValue={category.name} onSubmit={onSubmit} handleDelete={handleDelete} />;
 }
 
 export default CategoryUpdate;
