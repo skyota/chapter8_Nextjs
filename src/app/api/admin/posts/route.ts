@@ -9,7 +9,7 @@ export interface CreatePostRequestBody {
   title: string
   content: string
   categories: {id: number}[]
-  thumbnailUrl: string
+  thumbnailImageKey: string
 }
 
 export const GET = async (request: NextRequest) => {
@@ -57,14 +57,14 @@ export const POST = async (request: NextRequest, context: any) => {
     const body = await request.json()
 
     // bodyの中から取り出す
-    const { title, content, categories, thumbnailUrl }: CreatePostRequestBody = body
+    const { title, content, categories, thumbnailImageKey }: CreatePostRequestBody = body
 
     // prismaのpostモデルに対してcreateメソッドを使い、新しいレコードをINSERTする
     const data = await prisma.post.create({
       data: {
         title,
         content,
-        thumbnailUrl,
+        thumbnailImageKey,
       },
     })
 
