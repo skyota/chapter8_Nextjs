@@ -21,10 +21,13 @@ const PostCreate: React.FC = () => {
     const payload = {
       title: data.title,
       content: data.content,
-      thumbnailUrl: data.thumbnailUrl,
-      categories: (data.categoryIds || []).map((id) => ({ id: Number(id) }))
+      thumbnailImageKey: data.thumbnailImageKey,
+      categories: Array.isArray(data.categoryIds)
+        ? data.categoryIds.map((id) => ({ id: Number(id) }))
+        : data.categoryIds
+        ? [{ id: Number(data.categoryIds) }]
+        : []
     };
-
     try {
       const res = await api.post<CreatePostRequestBody>("/api/admin/posts", payload);
       if (!res.ok) throw new Error("Network response was not ok");

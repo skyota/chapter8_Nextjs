@@ -2,15 +2,21 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import Label from "../../../_components/Label";
-import TextInput from "../../../_components/TextInput"
+import TextInput from "@/app//_components/TextInput"
 import Textarea from "../../../_components/Textarea";
 import Checkbox from "../../../_components/Checkbox";
+import ImageInput from "../../../_components/ImageInput"; 
 import { Post, Category } from "@/app/_types/Post";
+import { supabase } from '@/app/_utils/supabase'
+import { v4 as uuidv4 } from 'uuid'
+import { useState, useEffect, ChangeEvent } from "react";
+import Image from "next/image";
+import { uploadFile } from "@/app/_utils/uploadFile";
 
 type PostFormValues = {
   title: string;
   content: string;
-  thumbnailUrl: string;
+  thumbnailImageKey: string;
   categoryIds: number[];
 }
 
@@ -23,9 +29,45 @@ type Props = {
 }
 
 const PostForm: React.FC<Props> = ({isEdit, categories, post, onSubmit, handleDelete}) => {
-  const {register, handleSubmit, formState: {errors}} = useForm<PostFormValues>();
+  const {register, handleSubmit, setValue, formState: {errors}} = useForm<PostFormValues>();
   
   const titleLabel = isEdit ? "編集" : "作成"
+
+  const [uploading, setUploading] = useState(false)
+  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files || event.target.files.length === 0) return;
+
+    const file = event.target.files[0];
+    const filePath = `private/${uuidv4()}`;
+
+    const { data, error } = await uploadFile(file, "post-thumbnail", filePath);
+
+    setUploading(false);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    if (data?.path) {
+      setValue("thumbnailImageKey", data.path);
+      alert("画像をアップロードしました！");
+    }
+  };
+
+  const [previewPath, setPreviewPath] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!post?.thumbnailImageKey) return;
+  
+    const { data } = supabase.storage
+      .from("post-thumbnail")
+      .getPublicUrl(post.thumbnailImageKey);
+  
+    if (data?.publicUrl) {
+      setPreviewPath(data.publicUrl);
+    }
+  }, [post?.thumbnailImageKey]);
 
   return (
     <div className="px-5 pt-10">
@@ -49,13 +91,23 @@ const PostForm: React.FC<Props> = ({isEdit, categories, post, onSubmit, handleDe
           />
         </div>
         <div>
-          <Label name="thumbnailUrl" label="サムネイルURL" />
-          <TextInput
-            type="text"
-            error={errors.thumbnailUrl?.message}
-            defaultValue={post?.thumbnailUrl}
-            {...register("thumbnailUrl", {required: "サムネイルURLは必須です"})}
+          <Label name="thumbnailImageKey" label="サムネイルURL" />
+          <ImageInput
+            name="thumbnailImageKey"
+            onChange={handleImageChange}
           />
+          {uploading && <p className="text-sm text-gray-500 mt-1">アップロード中...</p>}
+          {previewPath && (
+            <div className="mt-2">
+              <Image
+                src={previewPath}
+                alt="サムネイルプレビュー"
+                width={400}
+                height={400}
+                className="rounded"
+              />
+            </div>
+          )}
         </div>
         <div>
           <Label name="categories" label="カテゴリー" />

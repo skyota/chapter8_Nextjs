@@ -5,6 +5,11 @@ const nextConfig = {
       { protocol: 'https', hostname: 'placehold.jp' },
       { protocol: 'https', hostname: 'images.microcms-assets.io' },
       { protocol: 'https', hostname: 'example.com' },
+      {
+        protocol: 'https',
+        hostname: 'hjjqozexcbjylkoonwkg.supabase.co', // ✅ Supabase のホスト名を追加
+        pathname: '/storage/v1/object/public/**',       // ✅ パスパターンも指定
+      },
     ],
   },
 }

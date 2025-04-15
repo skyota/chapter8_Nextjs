@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { getUser } from "@/app/_utils/getUser";
 
 const prisma = new PrismaClient()
 
@@ -8,10 +9,15 @@ export interface CreatePostRequestBody {
   title: string
   content: string
   categories: {id: number}[]
-  thumbnailUrl: string
+  thumbnailImageKey: string
 }
 
 export const GET = async (request: NextRequest) => {
+  const { data, error } = await getUser(request);
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
+  
   try {
     const posts = await prisma.post.findMany({
       include: {
@@ -37,19 +43,24 @@ export const GET = async (request: NextRequest) => {
 }
 
 export const POST = async (request: NextRequest, context: any) => {
+  const { data, error } = await getUser(request);
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
+
   try {
     // リクエストの中のbodyを取得
     const body = await request.json()
 
     // bodyの中から取り出す
-    const { title, content, categories, thumbnailUrl }: CreatePostRequestBody = body
+    const { title, content, categories, thumbnailImageKey }: CreatePostRequestBody = body
 
     // prismaのpostモデルに対してcreateメソッドを使い、新しいレコードをINSERTする
     const data = await prisma.post.create({
       data: {
         title,
         content,
-        thumbnailUrl,
+        thumbnailImageKey,
       },
     })
 

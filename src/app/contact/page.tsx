@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import Label from './_components/Label';
 import Textarea from './_components/Textarea';
-import TextInput from './_components/TextInput';
+import TextInput from '@/app/_components/TextInput';
 
 type ContactForm = {
   name: string;

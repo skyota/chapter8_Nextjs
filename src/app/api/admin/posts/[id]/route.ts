@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { getUser } from "@/app/_utils/getUser";
 
 const prisma = new PrismaClient()
 
@@ -15,6 +16,11 @@ export const GET = async (
   { params }: { params: { id: string } },
 ) => {
   const { id } = params
+
+  const { data, error } = await getUser(request);
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
 
   try {
     const post = await prisma.post.findUnique({
@@ -47,6 +53,11 @@ export const PUT = async (
   const { id } = params
   const body = await request.json()
   const { title, content, categories, thumbnailUrl }: UpdatePostRequestBody = body
+
+  const { data, error } = await getUser(request);
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
 
   try {
     const post = await prisma.post.update({
@@ -86,6 +97,11 @@ export const DELETE = async (
   { params }: { params: { id: string } },
 ) => {
   const { id } = params
+
+  const { data, error } = await getUser(request);
+
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 })
 
   try {
     await prisma.post.delete({
