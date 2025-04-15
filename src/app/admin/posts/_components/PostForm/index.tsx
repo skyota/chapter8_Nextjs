@@ -11,6 +11,7 @@ import { supabase } from '@/app/_utils/supabase'
 import { v4 as uuidv4 } from 'uuid'
 import { useState, useEffect, ChangeEvent } from "react";
 import Image from "next/image";
+import { uploadFile } from "@/app/_utils/uploadFile";
 
 type PostFormValues = {
   title: string;
@@ -39,12 +40,7 @@ const PostForm: React.FC<Props> = ({isEdit, categories, post, onSubmit, handleDe
     const file = event.target.files[0];
     const filePath = `private/${uuidv4()}`;
 
-    const { data, error } = await supabase.storage
-      .from("post-thumbnail") 
-      .upload(filePath, file, {
-        cacheControl: "3600",
-        upsert: false,
-      });
+    const { data, error } = await uploadFile(file, "post-thumbnail", filePath);
 
     setUploading(false);
 
