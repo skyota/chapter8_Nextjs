@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import { supabase } from "@/app/_utils/supabase";
+import { getUser } from "@/app/_utils/getUser";
 
 const prisma = new PrismaClient()
 
@@ -17,9 +17,7 @@ export const GET = async (
 ) => {
   const { id } = params
 
-  const token = request.headers.get('Authorization') ?? ''
-
-  const { error } = await supabase.auth.getUser(token)
+  const { data, error } = await getUser(request);
 
   if (error)
     return NextResponse.json({ status: error.message }, { status: 400 })
@@ -56,9 +54,7 @@ export const PUT = async (
   const body = await request.json()
   const { title, content, categories, thumbnailUrl }: UpdatePostRequestBody = body
 
-  const token = request.headers.get('Authorization') ?? ''
-
-  const { error } = await supabase.auth.getUser(token)
+  const { data, error } = await getUser(request);
 
   if (error)
     return NextResponse.json({ status: error.message }, { status: 400 })
@@ -102,9 +98,7 @@ export const DELETE = async (
 ) => {
   const { id } = params
 
-  const token = request.headers.get('Authorization') ?? ''
-
-  const { error } = await supabase.auth.getUser(token)
+  const { data, error } = await getUser(request);
 
   if (error)
     return NextResponse.json({ status: error.message }, { status: 400 })

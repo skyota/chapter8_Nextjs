@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import { supabase } from "@/app/_utils/supabase";
+import { getUser } from "@/app/_utils/getUser";
 
 const prisma = new PrismaClient()
 
@@ -13,9 +13,7 @@ export interface CreatePostRequestBody {
 }
 
 export const GET = async (request: NextRequest) => {
-  const token = request.headers.get('Authorization') ?? ''
-
-  const { error } = await supabase.auth.getUser(token)
+  const { data, error } = await getUser(request);
 
   if (error)
     return NextResponse.json({ status: error.message }, { status: 400 })
@@ -45,9 +43,7 @@ export const GET = async (request: NextRequest) => {
 }
 
 export const POST = async (request: NextRequest, context: any) => {
-  const token = request.headers.get('Authorization') ?? ''
-
-  const { error } = await supabase.auth.getUser(token)
+  const { data, error } = await getUser(request);
 
   if (error)
     return NextResponse.json({ status: error.message }, { status: 400 })
