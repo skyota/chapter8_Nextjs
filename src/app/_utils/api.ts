@@ -1,5 +1,13 @@
+import { supabase } from "@/app/_utils/supabase";
+
+const getToken = async () => {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token;
+};
+
 export const api ={
-  get: async (url: string, token?: string) => {
+  get: async (url: string) => {
+    const token = await getToken();
     const res = await fetch(url, {
       method: "GET",
       headers: {
@@ -8,7 +16,8 @@ export const api ={
     });
   },
 
-  post: async <T>(url: string, body: T, token?: string) => {
+  post: async <T>(url: string, body: T) => {
+    const token = await getToken();
     return await fetch(url, {
       method: "POST",
       headers: {
@@ -19,7 +28,8 @@ export const api ={
     });
   },
   
-  put: async <T>(url: string, body: T, token?: string) => {
+  put: async <T>(url: string, body: T) => {
+    const token = await getToken();
     return await fetch(url, {
       method: "PUT",
       headers: {
@@ -30,7 +40,8 @@ export const api ={
     });
   },
 
-  delete: async (url: string, token?: string) => {
+  delete: async (url: string) => {
+    const token = await getToken();
     return await fetch(url, {
       method: "DELETE",
       headers: {

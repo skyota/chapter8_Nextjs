@@ -6,12 +6,10 @@ import useCategories from '../../_hooks/useCategories';
 import { api } from "@/app/_utils/api";
 import PostForm from "../_components/PostForm/index";
 import { CreatePostRequestBody } from "../../../api/admin/posts/route";
-import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 const PostCreate: React.FC = () => {
   const { data: categoryData, error: categoryError, isLoading: categoryLoading } = useCategories();
   const router = useRouter();
-  const { token } = useSupabaseSession();
 
   if (categoryLoading) return <p>読み込み中...</p>;
   if (categoryError) return <p>読み込みエラー</p>;
@@ -31,7 +29,7 @@ const PostCreate: React.FC = () => {
         : []
     };
     try {
-      const res = await api.post<CreatePostRequestBody>("/api/admin/posts", payload, token);
+      const res = await api.post<CreatePostRequestBody>("/api/admin/posts", payload);
       if (!res.ok) throw new Error("Network response was not ok");
       alert("記事を作成しました");
       router.push("/admin/posts");
