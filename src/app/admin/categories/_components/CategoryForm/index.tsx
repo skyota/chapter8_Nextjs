@@ -2,7 +2,7 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import Label from "../../../_components/Label";
-import TextInput from "../../../_components/TextInput"
+import TextInput from "@/app/_components/TextInput"
 
 type CategoryFormValues = {
   name: string;

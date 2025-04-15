@@ -2,7 +2,7 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import Label from "../../../_components/Label";
-import TextInput from "../../../_components/TextInput"
+import TextInput from "@/app//_components/TextInput"
 import Textarea from "../../../_components/Textarea";
 import Checkbox from "../../../_components/Checkbox";
 import ImageInput from "../../../_components/ImageInput"; 
@@ -58,7 +58,7 @@ const PostForm: React.FC<Props> = ({isEdit, categories, post, onSubmit, handleDe
       alert("画像をアップロードしました！");
     }
   };
-  
+
   const [previewPath, setPreviewPath] = useState<string | null>(null);
 
   useEffect(() => {

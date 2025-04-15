@@ -2,31 +2,34 @@
 
 import { supabase } from '@/app/_utils/supabase'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useForm, SubmitHandler } from "react-hook-form";
+import TextInput from '@/app/_components/TextInput'
+
+type LoginForm = {
+  email: string;
+  password: string;
+}
 
 export default function Page() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const router = useRouter()
+  const {register, handleSubmit, formState: { errors, isSubmitting }, reset} = useForm<LoginForm>()
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+    const { email, password } = data;
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      alert('ログインに失敗しました')
+      alert('ログインに失敗しました');
     } else {
-      router.replace('/admin/posts')
+      reset();
+      router.replace('/admin/posts');
     }
   }
 
   return (
     <div className="flex justify-center pt-[240px]">
-      <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-[400px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full max-w-[400px]">
         <div>
           <label
             htmlFor="email"
@@ -34,14 +37,19 @@ export default function Page() {
           >
             メールアドレス
           </label>
-          <input
-            type="email"
+          <TextInput
             name="email"
-            id="email"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            type="email"
             placeholder="name@company.com"
-            required
-            onChange={(e) => setEmail(e.target.value)}
+            error={errors.email?.message}
+            disabled={isSubmitting}
+            {...register("email", {
+              required: "メールアドレスは必須です",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "正しいメールアドレスを入力してください",
+              },
+            })}
           />
         </div>
         <div>
@@ -51,14 +59,15 @@ export default function Page() {
           >
             パスワード
           </label>
-          <input
-            type="password"
+          <TextInput
             name="password"
-            id="password"
+            type="password"
             placeholder="••••••••"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            required
-            onChange={(e) => setPassword(e.target.value)}
+            error={errors.password?.message}
+            disabled={isSubmitting}
+            {...register("password", {
+              required: "パスワードは必須です",
+            })}
           />
         </div>
 
